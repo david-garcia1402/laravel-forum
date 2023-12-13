@@ -39,27 +39,35 @@
     <div class="container">
         <div class="form-card">
           @if($id)
-              @foreach ($id as $idInfo)
-                <form action="{{ route('forum.update', ['id' => $idInfo->id]) }}" method="POST">
+                <form action="{{ route('forum.update', ['id' => $id->id]) }}" method="POST">
                     @csrf
                     @method('PUT')
-                    <legend>Matéria: {{ $idInfo->subject }}</legend>
+                    <legend>Matéria: {{ $id->subject }}</legend>
                     <div class="mb-3">
                         <label class="form-label">Matéria</label>
-                        <input type="text" id="subject" value="{{ $idInfo->subject }}" name="subject" class="form-control" placeholder="Insira a matéria">
+                        <select class="form-select" name="subject" id="subject">
+                            {{  
+                                $materiaSelecionada = $id->subject
+                            }}
+                            <option value="{{ $id->subject }}" selected>{{ $id->subject }}</option>
+                            @foreach ($id->user->subject as $subject)
+                                @if ($subject->subject != $materiaSelecionada)
+                                    <option value="{{ $subject->subject }}">{{ $subject->subject }}</option> 
+                                @endif
+                            @endforeach
+                        </select>
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Status</label>
-                        <input class="form-control" id="status" value="{{ $idInfo->status }}" name="status" type="text">
+                        <input class="form-control" id="status" value="{{ $id->status }}" name="status" type="text">
                     </div>
                     <div>
                         <label class="form-label">Descrição</label>
-                        <textarea class="form-control mb-3" style="height: 200px; resize: vertical; max-height:300px" id="description" name="description">{{ $idInfo->description }}</textarea>
+                        <textarea class="form-control mb-3" style="height: 200px; resize: vertical; max-height:300px" id="description" name="description">{{ $id->description }}</textarea>
                     </div>
                     <a href="{{ route('forum.index') }}"><button type="button" class="btn btn-light">Voltar</button></a>
                     <button type="submit" class="btn btn-light">Enviar</button>
                </form> 
-               @endforeach
             @endif 
         </div>  
     </div>    

@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\SupportRequest;
+use App\Models\Subject;
 use App\Models\Support;
 use Illuminate\Http\Request;
+use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
@@ -21,8 +24,9 @@ class SupportController extends Controller
             Session::put('key', $key);
             $qntdRegistros = Support::count();
             if ($qntdRegistros > 0) {
-                $forum = DB::table('supports')->select('name as user', 'supports.id as id', 'users.id as idUser', 'status', 'subject', 'description')
-                    ->leftJoin('users', 'supports.user_id', '=', 'users.id')->get();
+                $forum = Support::select('name as user', 'supports.id as id', 'users.id as idUser', 'status', 'subject', 'description')
+                                ->leftJoin('users', 'supports.user_id', '=', 'users.id')
+                                ->get();
                 return view('forum.index', ['supports' => $forum, 'contador' => 1]);
             } else {
                 Session::flash('semDuvidas');
@@ -49,10 +53,9 @@ class SupportController extends Controller
     public function create()
     {
         $iduser = auth()->user()->id; 
-        $materiasCadastradas = DB::table('subjects')->where('user_id', '=', $iduser)->count(); //query para verificar se o usuário já cadastrou alguma matéria
-        
+        $materiasCadastradas = Subject::where('user_id', $iduser)->count(); //query para verificar se o usuário já cadastrou alguma matéria
         if ($materiasCadastradas > 0) {
-            $materiasUsuario = DB::table('subjects')->where('user_id', '=', $iduser)->get();
+            $materiasUsuario = Subject::where('user_id', $iduser)->get();
             return view('forum.form-create', ['userSubjects' => $materiasUsuario]);
         } else {
             Session::forget('semDuvidas');
@@ -63,13 +66,15 @@ class SupportController extends Controller
 
     public function destroy($id)
     {
-        DB::table('supports')->where('id', '=', $id)->delete();
+        Support::where('id', $id)->delete();
         return redirect()->route('forum.index');
     }
 
     public function edit($id)
     {
-        $editId = DB::table('supports')->where('id', '=', $id)->get();
+        // $editId = Support::where('id', $id)->get();
+        // dd($editId);
+        $editId = Support::findOrFail($id);        
         return view('forum.support-edit', ['id' => $editId]);
     }
 
@@ -89,7 +94,7 @@ class SupportController extends Controller
 
     public function view($id)
     {
-        $registro = DB::table('supports')->select('subject', 'status', 'description')->where('id', '=', $id)->get();
+        $registro = Support::select('subject', 'status', 'description')->where('id', $id)->get();
         return view('forum.support-details', ['details' => $registro]);
     }
 
@@ -100,7 +105,7 @@ class SupportController extends Controller
         $description    = $request->description;
         $idUser         = auth()->user()->id;
 
-        DB::table('supports')->insert([
+        Support::create([
             'subject'       => $materia,
             'description'   => $description,
             'user_id'       => $idUser

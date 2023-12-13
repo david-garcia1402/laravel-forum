@@ -74,18 +74,21 @@
                         <option value='Guerras Mundiais'>Guerras Mundiais</option>
                     </select>
                 </div>
-                <div class="mb-3">
-                    <label class="form-label">Suas matérias</label>
-                    <br>
                 @if($userSubject)
-                    <div class="descricao ">
-                        <textarea class='form-control' style="max-height:550px; min-height:300px;" disabled id='subjects'>
-                            @foreach ($userSubject as $subject)
-                                {{ $subject->subject }}
-                            @endforeach
-                        </textarea> 
+                    <div class="mb-3">
+                        <label class="form-label">Suas matérias</label>
+                        <div class="descricao ">
+                            <textarea class='form-control' style="max-height:550px; min-height:300px;" disabled id='subjects'>
+                                @foreach ($userSubject as $subject)
+                                    {{ $subject->subject }}
+                                @endforeach
+                            </textarea> 
+                        </div>
                     </div>
-                </div>
+                @else
+                    <div class="mb-3">
+                        <label class="form-label">Cadastre suas matérias</label>
+                <br>
                 @endif
                 <button type="submit" class="btn btn-light">Enviar</button>
             </form>

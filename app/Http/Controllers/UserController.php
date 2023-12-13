@@ -28,14 +28,14 @@ class UserController extends Controller
         $password   = $request->password;
         $email      = $request->email;
 
-        $registros = DB::table('users')->where('name', '=', $name)
-                                        ->orWhere('email', '=', $email)->count();
+        $registros = User::where('name', '=', $name)
+                        ->orWhere('email', '=', $email)->count();
         
         if ($registros > 0) { //Já existe um registro 
             Session::flash('hasUser', 'E-mail ou usuário já sendo usado.');
             return redirect()->route('welcome.index');
         } else {
-            DB::table('users')->insert([
+            User::insert([
                 'name'      => $name,
                 'email'     => $email,
                 'password'  => $password

@@ -15,32 +15,38 @@ use App\Http\Controllers\UserController;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+
 Route::prefix('/')->group(function (){
     Route::get('', [UserController::class, 'index'])->name('welcome.index');
     Route::get('create', [UserController::class, 'create'])->name('welcome.create');
     Route::get('login', [UserController::class, 'login'])->name('welcome.login');
     Route::post('verifyLogin', [UserController::class, 'verifyLogin'])->name('welcome.verifyLogin');
-    Route::get('logout', [UserController::class, 'logout'])->middleware('auth')->name('logout');
+    Route::get('logout', [UserController::class, 'logout'])->name('logout');
     Route::post('', [UserController::class, 'store'])->name('welcome.store');
 });
 
 
-Route::prefix('/forum')->group(function (){
-    Route::get('', [SupportController::class, 'index'])->middleware('auth')->name('forum.index');
-    Route::get('/create', [SupportController::class, 'create'])->middleware('auth')->name('forum.create');
-    Route::get('/user', [SupportController::class, 'userDetails'])->name('forum.user');
-    Route::get('/{id}', [SupportController::class, 'destroy'])->middleware('auth')->name('forum.destroy');
-    Route::get('/view/{id}', [SupportController::class, 'view'])->middleware('auth')->name('forum.view');
-    Route::get('/{id}/edit', [SupportController::class, 'edit'])->middleware('auth')->name('forum.edit');
-    Route::put('/{id}', [SupportController::class, 'update'])->middleware('auth')->name('forum.update');
-    Route::post('/', [SupportController::class, 'store'])->middleware('auth')->name('forum.store');
+Route::middleware('auth')->group(function (){
+
+    Route::prefix('/forum')->group(function (){
+        Route::get('', [SupportController::class, 'index'])->name('forum.index');
+        Route::get('/create', [SupportController::class, 'create'])->name('forum.create');
+        Route::get('/user', [SupportController::class, 'userDetails'])->name('forum.user');
+        Route::get('/{id}', [SupportController::class, 'destroy'])->name('forum.destroy');
+        Route::get('/view/{id}', [SupportController::class, 'view'])->name('forum.view');
+        Route::get('/{id}/edit', [SupportController::class, 'edit'])->name('forum.edit');
+        Route::put('/{id}', [SupportController::class, 'update'])->name('forum.update');
+        Route::post('/', [SupportController::class, 'store'])->name('forum.store');
+
+    });
 
 });
 
 Route::prefix('/subject')->group(function (){
-    Route::get('/createsubject', [SubjectController::class, 'create'])->middleware('auth')->name('forum.create-subject');
-    Route::post('/', [SubjectController::class, 'store'])->middleware('auth')->name('forum.store-subject');
+    Route::get('/createsubject', [SubjectController::class, 'create'])->name('forum.create-subject');
+    Route::post('/', [SubjectController::class, 'store'])->name('forum.store-subject');
 });
+
 
 
 
