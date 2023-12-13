@@ -1,0 +1,47 @@
+<?php
+
+use App\Http\Controllers\SubjectController;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\SupportController;
+use App\Http\Controllers\UserController;
+
+/*
+|--------------------------------------------------------------------------
+| Web Routes
+|--------------------------------------------------------------------------
+|
+| Here is where you can register web routes for your application. These
+| routes are loaded by the RouteServiceProvider and all of them will
+| be assigned to the "web" middleware group. Make something great!
+|
+*/
+Route::prefix('/')->group(function (){
+    Route::get('', [UserController::class, 'index'])->name('welcome.index');
+    Route::get('create', [UserController::class, 'create'])->name('welcome.create');
+    Route::get('login', [UserController::class, 'login'])->name('welcome.login');
+    Route::post('verifyLogin', [UserController::class, 'verifyLogin'])->name('welcome.verifyLogin');
+    Route::get('logout', [UserController::class, 'logout'])->middleware('auth')->name('logout');
+    Route::post('', [UserController::class, 'store'])->name('welcome.store');
+});
+
+
+Route::prefix('/forum')->group(function (){
+    Route::get('', [SupportController::class, 'index'])->middleware('auth')->name('forum.index');
+    Route::get('/create', [SupportController::class, 'create'])->middleware('auth')->name('forum.create');
+    Route::get('/user', [SupportController::class, 'userDetails'])->name('forum.user');
+    Route::get('/{id}', [SupportController::class, 'destroy'])->middleware('auth')->name('forum.destroy');
+    Route::get('/view/{id}', [SupportController::class, 'view'])->middleware('auth')->name('forum.view');
+    Route::get('/{id}/edit', [SupportController::class, 'edit'])->middleware('auth')->name('forum.edit');
+    Route::put('/{id}', [SupportController::class, 'update'])->middleware('auth')->name('forum.update');
+    Route::post('/', [SupportController::class, 'store'])->middleware('auth')->name('forum.store');
+
+});
+
+Route::prefix('/subject')->group(function (){
+    Route::get('/createsubject', [SubjectController::class, 'create'])->middleware('auth')->name('forum.create-subject');
+    Route::post('/', [SubjectController::class, 'store'])->middleware('auth')->name('forum.store-subject');
+});
+
+
+
+
