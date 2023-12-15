@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Support;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -35,7 +36,7 @@ class UserController extends Controller
             Session::flash('hasUser', 'E-mail ou usuário já sendo usado.');
             return redirect()->route('welcome.index');
         } else {
-            User::insert([
+            User::create([
                 'name'      => $name,
                 'email'     => $email,
                 'password'  => $password
@@ -56,10 +57,8 @@ class UserController extends Controller
     {
         $name       = $request->name;
         $password   = $request->password;
-        $passhash   = Hash::make($password);
         $user       = User::where('name', $name)->first();
-
-        if ($user && Hash::check($user->password, $passhash)) {
+        if ($user && Hash::check($password, $user->password)) {
             Auth::login($user);
             $request->session()->regenerate();
             return redirect()->intended('/forum');
