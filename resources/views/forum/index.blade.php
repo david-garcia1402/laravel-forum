@@ -32,6 +32,7 @@
                     {{Session::get('semMaterias')}}
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
+                @include('include.table-forum')
             @elseif(Session::has('atualizado'))
                 <div class="alert alert-success alert-dismissible fade show" role="alert">
                     Dúvida atualizado com sucesso
@@ -43,6 +44,13 @@
                     Não há dúvidas no fórum atualmente. Volte mais tarde!
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
+                @include('include.table-forum')
+                @elseif(Session::has('respostaSuccess'))
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        {{Session::get('respostaSuccess')}}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    @include('include.table-forum')
             @else
                 @include('include.table-forum')
         @endif

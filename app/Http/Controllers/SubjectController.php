@@ -35,7 +35,7 @@ class SubjectController extends Controller
             Session::flash('hasSubject', 'Você já cadastrou essa matéria.');
             return redirect()->route('forum.create-subject');
         } else {
-            Subject::insert([
+            Subject::create([
                 'subject' => $subject,
                 'user_id' => $iduser,
             ]);
