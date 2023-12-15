@@ -4,6 +4,8 @@ use App\Http\Controllers\SubjectController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SupportController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\AnswerController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -36,16 +38,20 @@ Route::middleware('auth')->group(function (){
         Route::get('/view/{id}', [SupportController::class, 'view'])->name('forum.view');
         Route::get('/{id}/edit', [SupportController::class, 'edit'])->name('forum.edit');
         Route::put('/{id}', [SupportController::class, 'update'])->name('forum.update');
-        Route::post('/', [SupportController::class, 'store'])->name('forum.store');
+        Route::post('/answer', [AnswerController::class, 'store'])->name('answer.store');
+        Route::post('', [SupportController::class, 'store'])->name('forum.store');
+        Route::get('answer/{id}/{user}/{subject}/{description}', [AnswerController::class, 'create'])->name('answer.create');
+    });
 
+    Route::prefix('/subject')->group(function (){
+        Route::get('/createsubject', [SubjectController::class, 'create'])->name('forum.create-subject');
+        Route::post('/subject', [SubjectController::class, 'store'])->name('forum.store-subject');
     });
 
 });
 
-Route::prefix('/subject')->group(function (){
-    Route::get('/createsubject', [SubjectController::class, 'create'])->name('forum.create-subject');
-    Route::post('/', [SubjectController::class, 'store'])->name('forum.store-subject');
-});
+
+
 
 
 
