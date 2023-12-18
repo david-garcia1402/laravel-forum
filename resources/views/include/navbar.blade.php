@@ -18,6 +18,9 @@
             <a class="nav-link text-white px-2" href="{{ route('forum.create-subject') }}"><span>Inserir matéria</span></a>
         </li>
         <li class="nav-item">
+            <a class="nav-link text-white px-2" href="{{ route('forum.user-dashboard') }}"><span>Estatísticas</span></a>
+        </li>
+        <li class="nav-item">
             <a class="nav-link text-white px-2" href="{{ route('logout') }}"><span>Logout</span></a>
         </li>
         </ul>

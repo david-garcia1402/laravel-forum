@@ -83,16 +83,16 @@
             <button type="submit" class="btn btn-light mb-3">Enviar</button>
         </form>
     </div>  
-        @if ($myanswers)
-            <div class="mb-3" id="scrollable-div">
-                <legend style="text-align: center" id="answers" name='answers'>
-                    <p class="align-items-center">Respostas</p>
-                </legend>
-                    @foreach ($myanswers as $answer)
-                        <p>{{ $answer->name }} <textarea style="max-height: 300px; min-height:80px; resize:vertical" class="form-control mt-2" id="answer" name="answer" disabled> {{$answer->answer}} </textarea></p>
-                    @endforeach
-            </div>
-        @endif
+    @if ($myanswers)
+        <div class="mb-3" id="scrollable-div">
+            <legend style="text-align: center" id="answers" name='answers'>
+                <p class="align-items-center">Respostas</p>
+            </legend>
+                @foreach ($myanswers as $answer)
+                    <p>{{ $answer->name }} <textarea style="max-height: 300px; min-height:80px; resize:vertical" class="form-control mt-2" id="answer" name="answer" disabled> {{$answer->answer}} </textarea></p>
+                @endforeach
+        </div>
+    @endif
 </div> 
 </body>
 </html>

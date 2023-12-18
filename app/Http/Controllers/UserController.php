@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Support;
 use App\Models\User;
+use App\Models\Answer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
@@ -31,8 +32,8 @@ class UserController extends Controller
 
         $registros = User::where('name', '=', $name)
                         ->orWhere('email', '=', $email)->count();
-        
-        if ($registros > 0) { //Já existe um registro 
+
+        if ($registros > 0) { //Já existe um registro
             Session::flash('hasUser', 'E-mail ou usuário já sendo usado.');
             return redirect()->route('welcome.index');
         } else {
@@ -41,7 +42,7 @@ class UserController extends Controller
                 'email'     => $email,
                 'password'  => $password
             ]);
-    
+
             Session::flash('registered', 'Cadastro realizado com sucesso!');
             return redirect()->route('welcome.index');
         }
@@ -51,6 +52,31 @@ class UserController extends Controller
     public function login()
     {
         return view('auth.signin');
+    }
+
+    public function dashboard()
+    {
+        $idUser = auth()->user()->id;
+        $nameUser = auth()->user()->name;
+
+        $dateRegister = User::selectRaw('DATE_FORMAT(created_at, "%d / %m / %Y") as data')
+                                ->where('id', $idUser)->first();
+
+        $qtdSupports = Support::where('user_id', $idUser)->count();
+
+        $qtdAnsweredSupports = Answer::where('user_id_answer', $idUser)->count();
+
+        $qtdAnswers = Answer::where('user_id_support', $idUser)->count();
+
+        $estatisticas = [
+            'nameUser'              => $nameUser,
+            'dateRegister'          => $dateRegister,
+            'qtdSupports'           => $qtdSupports,
+            'qtdAnsweredSupports'   => $qtdAnsweredSupports,
+            'qtdAnswers'            => $qtdAnswers
+        ];
+
+        return view('forum.dashboard', ['estatisticas' => $estatisticas]);
     }
 
     public function verifyLogin(Request $request)
@@ -68,7 +94,7 @@ class UserController extends Controller
         }
     }
 
-    public function logout() 
+    public function logout()
     {
         if(auth()->check()) {
             Session::flash('logout', 'Você foi deslogado.');
