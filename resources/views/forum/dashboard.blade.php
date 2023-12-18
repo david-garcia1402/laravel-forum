@@ -38,24 +38,23 @@
     @include('include.navbar')
     <div class="container">
         <div class="form-card">
-            <legend>Verifique suas estatísticas #####</legend>
-            <div class="mb-3">
-                <label for="form-select" class="form-label">Entrou em:</label>
-                <input class="form-control" type="text" name="dateRegister" id="dateRegister">
-            </div>
-            <div class="mb-3">
-                <label class="form-label">Dúvidas postadas:</label>
-                <input class="form-control" type="text" id="qtdSupports" name="qtdSupports">
-            </div>
-            <div class="mb-3">
-                <label class="form-label">Dúvidas respondidas:</label>
-                <input class="form-control" type="text" id="qtdAnswers" name="qtdAnswers">
-            </div>
-            <div class="mb-3">
-                <label class="form-label">Suas respostas:</label>
-                <input class="form-control" type="text" id="myAnswers" name="myAnswers">
-            </div>
-            <button type="submit" class="btn btn-light">Enviar</button>
+            <legend>Verifique suas estatísticas {{ $estatisticas['nameUser'] }}</legend>
+                <div class="mb-3">
+                    <label for="form-select" class="form-label">Entrou em:</label>
+                    <input class="form-control" value="{{ $estatisticas['dateRegister']->data }}" type="text" name="dateRegister" id="dateRegister">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Quantidade de dúvidas postadas:</label>
+                    <input class="form-control" value="{{ $estatisticas['qtdSupports'] }}" type="text" id="qtdSupports" name="qtdSupports">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Quantidade de vezes que te responderam:</label>
+                    <input class="form-control" value="{{ $estatisticas['qtdAnswers'] }}" type="text" id="qtdAnswers" name="qtdAnswers">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Quantidade de vezes que você respondeu:</label>
+                    <input class="form-control" value="{{ $estatisticas['qtdAnsweredSupports'] }}" type="text" id="myAnswers" name="myAnswers">
+                </div>
         </div>  
     </div>    
 </body>

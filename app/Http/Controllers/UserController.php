@@ -57,24 +57,26 @@ class UserController extends Controller
     public function dashboard()
     {
         $idUser = auth()->user()->id;
-        $dateRegister = User::selectRaw('DATE_FORMAT(created_at, "%M %d %Y")')
-            ->where('id', $idUser)->first();
+        $nameUser = auth()->user()->name;
+
+        $dateRegister = User::selectRaw('DATE_FORMAT(created_at, "%d / %m / %Y") as data')
+                                ->where('id', $idUser)->first();
 
         $qtdSupports = Support::where('user_id', $idUser)->count();
 
-        $qtdAnsweredSupports = Answer::where('user_id_support', $idUser)->count();
+        $qtdAnsweredSupports = Answer::where('user_id_answer', $idUser)->count();
 
         $qtdAnswers = Answer::where('user_id_support', $idUser)->count();
 
         $estatisticas = [
+            'nameUser'              => $nameUser,
             'dateRegister'          => $dateRegister,
             'qtdSupports'           => $qtdSupports,
             'qtdAnsweredSupports'   => $qtdAnsweredSupports,
             'qtdAnswers'            => $qtdAnswers
         ];
 
-        dd($estatisticas);
-        return view('forum.dashboard');
+        return view('forum.dashboard', ['estatisticas' => $estatisticas]);
     }
 
     public function verifyLogin(Request $request)
