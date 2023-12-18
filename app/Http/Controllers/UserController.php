@@ -32,8 +32,8 @@ class UserController extends Controller
 
         $registros = User::where('name', '=', $name)
                         ->orWhere('email', '=', $email)->count();
-        
-        if ($registros > 0) { //Já existe um registro 
+
+        if ($registros > 0) { //Já existe um registro
             Session::flash('hasUser', 'E-mail ou usuário já sendo usado.');
             return redirect()->route('welcome.index');
         } else {
@@ -42,7 +42,7 @@ class UserController extends Controller
                 'email'     => $email,
                 'password'  => $password
             ]);
-    
+
             Session::flash('registered', 'Cadastro realizado com sucesso!');
             return redirect()->route('welcome.index');
         }
@@ -57,17 +57,14 @@ class UserController extends Controller
     public function dashboard()
     {
         $idUser = auth()->user()->id;
-        $dateRegister = User::select('DATE_FORMAT(created_at, "%M %d %Y")')
-                                ->where('id', $idUser)->first();
+        $dateRegister = User::selectRaw('DATE_FORMAT(created_at, "%M %d %Y")')
+            ->where('id', $idUser)->first();
 
-        $qtdSupports = Support::select('COUNT(user_id)')
-                                ->where('user_id', $idUser)->first();
-        
-        $qtdAnsweredSupports = Answer::select('COUNT(user_id_support)')
-                                ->where('user_id_support', $idUser)->first();
+        $qtdSupports = Support::where('user_id', $idUser)->count();
 
-        $qtdAnswers = Answer::select('COUNT(user_id_answer)')
-                                ->where('user_id_support', $idUser)->first();
+        $qtdAnsweredSupports = Answer::where('user_id_support', $idUser)->count();
+
+        $qtdAnswers = Answer::where('user_id_support', $idUser)->count();
 
         $estatisticas = [
             'dateRegister'          => $dateRegister,
@@ -95,7 +92,7 @@ class UserController extends Controller
         }
     }
 
-    public function logout() 
+    public function logout()
     {
         if(auth()->check()) {
             Session::flash('logout', 'Você foi deslogado.');
