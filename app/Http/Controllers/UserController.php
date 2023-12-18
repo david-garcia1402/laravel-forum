@@ -57,7 +57,7 @@ class UserController extends Controller
     public function dashboard()
     {
         $idUser = auth()->user()->id;
-        $dateRegister = User::select('DATE_FORMAT(created_at, "%M %d %Y")')
+        $dateRegister = User::selectRaw('DATE_FORMAT(created_at, "%M %d %Y")')
                                 ->where('id', $idUser)->first();
 
         $qtdSupports = Support::select('COUNT(user_id)')
