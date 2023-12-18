@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SupportRequest;
 use App\Models\Subject;
+use App\Models\Answer;
 use App\Models\Support;
 use Illuminate\Http\Request;
 use App\Models\User;
@@ -66,14 +67,13 @@ class SupportController extends Controller
 
     public function destroy($id)
     {
+        Answer::where('support_id', $id)->delete();
         Support::where('id', $id)->delete();
         return redirect()->route('forum.index');
     }
 
     public function edit($id)
     {
-        // $editId = Support::where('id', $id)->get();
-        // dd($editId);
         $editId = Support::findOrFail($id);        
         return view('forum.support-edit', ['id' => $editId]);
     }

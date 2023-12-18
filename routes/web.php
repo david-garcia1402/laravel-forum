@@ -48,6 +48,9 @@ Route::middleware('auth')->group(function (){
         Route::post('/subject', [SubjectController::class, 'store'])->name('forum.store-subject');
     });
 
+    Route::get('/dashboard', [UserController::class, 'dashboard'])->name('forum.user-dashboard');
+
+
 });
 
 

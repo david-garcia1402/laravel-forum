@@ -18,7 +18,8 @@ class Answer extends Model
 
     protected $fillable = [
         'answer',
-        'user_id',
+        'user_id_answer',
+        'user_id_support',
         'support_id'
     ];
 }
