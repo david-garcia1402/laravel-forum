@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Support;
 use App\Models\User;
+use App\Models\Answer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
@@ -51,6 +52,32 @@ class UserController extends Controller
     public function login()
     {
         return view('auth.signin');
+    }
+
+    public function dashboard()
+    {
+        $idUser = auth()->user()->id;
+        $dateRegister = User::select('DATE_FORMAT(created_at, "%M %d %Y")')
+                                ->where('id', $idUser)->first();
+
+        $qtdSupports = Support::select('COUNT(user_id)')
+                                ->where('user_id', $idUser)->first();
+        
+        $qtdAnsweredSupports = Answer::select('COUNT(user_id_support)')
+                                ->where('user_id_support', $idUser)->first();
+
+        $qtdAnswers = Answer::select('COUNT(user_id_answer)')
+                                ->where('user_id_support', $idUser)->first();
+
+        $estatisticas = [
+            'dateRegister'          => $dateRegister,
+            'qtdSupports'           => $qtdSupports,
+            'qtdAnsweredSupports'   => $qtdAnsweredSupports,
+            'qtdAnswers'            => $qtdAnswers
+        ];
+
+        dd($estatisticas);
+        return view('forum.dashboard');
     }
 
     public function verifyLogin(Request $request)
