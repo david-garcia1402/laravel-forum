@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SupportController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AnswerController;
-
+use App\Models\Subject;
 
 /*
 |--------------------------------------------------------------------------
@@ -49,6 +49,7 @@ Route::middleware('auth')->group(function (){
     });
 
     Route::get('/dashboard', [UserController::class, 'dashboard'])->name('forum.user-dashboard');
+    Route::put('/{id}', [UserController::class, 'update'])->name('forum.user-update');
 
 
 });

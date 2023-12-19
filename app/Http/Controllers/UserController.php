@@ -79,6 +79,25 @@ class UserController extends Controller
         return view('forum.dashboard', ['estatisticas' => $estatisticas]);
     }
 
+    public function update(Request $request, $id)
+    {
+        $usuario = User::findOrFail($id);
+        $usuario->email = $request->input('email');
+        
+        $mailDB = User::select('email')->where('email', $usuario->email)->count();
+
+        if ($mailDB > 0) {
+            Session::flash('errorEditUser', 'Insira um e-mail válido.');
+            return redirect()->route('forum.user');
+        } else {
+            $update = $usuario->save();
+            if ($update) {
+                Session::flash('successEditUser', 'E-mail editado com sucesso.');
+                return redirect()->route('forum.user');
+            }
+        }
+    }
+
     public function verifyLogin(Request $request)
     {
         $name       = $request->name;
