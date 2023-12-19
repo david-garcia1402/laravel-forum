@@ -38,16 +38,32 @@
     @include('include.navbar')
     <div class="container">
         <div class="form-card">
+            @if (Session::has('errorEditUser'))
+            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                {{Session::get('errorEditUser')}}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            @elseif (Session::has('successEditUser'))
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                {{Session::get('successEditUser')}}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            @endif
           @if($details)
+          <form action="{{ route('forum.user-update', ['id' => $details['id']]) }}" method="POST">
+            @csrf
+            @method('PUT')
               <legend>Usuário: {{ $details['name'] }}</legend>
               <div class="mb-3">
                   <label for="disabledTextInput" class="form-label">Usuário</label>
-                  <input type="text" id="subject" value="{{ $details['name'] }}" name="subject" class="form-control" placeholder="Insira a matéria" disabled>
+                  <input type="text" id="name" value="{{ $details['name'] }}" name="name" class="form-control" placeholder="Insira a matéria" disabled>
               </div>
               <div class="mb-3">
                   <label class="form-label">Email</label>
-                  <input class="form-control" id="description" value="{{ $details['email']}}" name="description" type="text" disabled>
+                  <input class="form-control" id="email" value="{{ $details['email']}}" name="email" type="text">
               </div>
+              <button type="submit" class="btn btn-light">Editar</button>
+          </form>
           @endif
         </div>  
     </div>    

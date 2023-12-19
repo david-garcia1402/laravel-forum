@@ -65,7 +65,6 @@
                         <label class="form-label">Descrição</label>
                         <textarea class="form-control mb-3" style="height: 200px; resize: vertical; max-height:300px" id="description" name="description">{{ $id->description }}</textarea>
                     </div>
-                    <a href="{{ route('forum.index') }}"><button type="button" class="btn btn-light">Voltar</button></a>
                     <button type="submit" class="btn btn-light">Enviar</button>
                </form> 
             @endif 
